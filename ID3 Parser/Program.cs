@@ -50,13 +50,24 @@ namespace ID3_Parser
             return dirPath;
         }
     }
+
+   
     class Program
     {
         static void Main(string[] args)
         {
 
-            Target_Dir dir = new Target_Dir();
-            Console.WriteLine(dir.getPath());
+            // Target_Dir dir = new Target_Dir();
+
+            ConsoleUI ui = new ConsoleUI();
+
+            while (true)
+            { 
+            ui.AwaitInput();
+            ui.ValidateCommand();
+            
+            }
+            
         }
     }
 }
