@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using System.IO;
+using TagLib;
 
 namespace ID3_Parser
 {   
@@ -12,12 +13,15 @@ namespace ID3_Parser
             ConsoleUI ui = new ConsoleUI();
 
             while (true)
-            { 
-            ui.AwaitInput();
-            ui.ValidateCommand();
-            
+            {
+                ui.AwaitInput();
+                ui.ValidateCommand();
+
             }
-            
+
+
+
+
         }
     }
 }

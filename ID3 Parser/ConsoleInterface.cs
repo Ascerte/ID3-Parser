@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using System.IO;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace ID3_Parser
 { 
@@ -16,9 +18,10 @@ namespace ID3_Parser
 
     class ConsoleUI
     {
-        DirectoryInfo dir;
         string dirPath;
-        FileInfo[] filesArray;
+        IEnumerable<string> filesArray;
+        
+        List<TagLib.File> MusicList = new List<TagLib.File>();
 
         public string[] Command = new string[2] { "", "" };
         private const int CmdMax = 5;
@@ -63,16 +66,26 @@ namespace ID3_Parser
 
         }
 
+        public void PrintTags(TagLib.File file)
+        {
+            //Console.WriteLine("{0,-10} | {1} | {2}", file.Tag.Title, String.Join(" ",file.Tag.Performers), String.Join(" ",file.Tag.Genres));
+           // string[] performers = file.Tag.Genres;
+            //Console.WriteLine(String.Join(" ",performers));
+           // Console.Write("{0}", file.Tag.Genres);
+
+        }
+
         private void ListFiles()
         {
-            //throw new NotImplementedException();
+            int index = 0;
 
-            foreach( FileInfo file in filesArray)
+            foreach(var file in MusicList)
             {
-                int Index = 0;
-                Console.Write("{0}| ", Index++);
-                Console.WriteLine("{0}  {1} bytes",file.Name,file.Length);
+                Console.Write("{0} | ",index++);
+                    Console.WriteLine("{0}", file.Name);
             }
+
+            
 
         }
 
@@ -112,9 +125,9 @@ namespace ID3_Parser
             else
             {
                 dirPath = CmdArg[1];
-                dir = new DirectoryInfo(dirPath);
-                filesArray = dir.GetFiles();
-                Console.WriteLine("The current path is now {0}", dir.Name);
+                filesArray = Directory.GetFiles(dirPath, "*.*",SearchOption.AllDirectories).Where(s => s.EndsWith(".mp3") || s.EndsWith(".flac") || s.EndsWith(".m4a") || s.EndsWith(".wma"));
+                Console.WriteLine("The current path is now {0}", dirPath);
+                CreateMusicList();
             }
             
         }
@@ -151,6 +164,22 @@ namespace ID3_Parser
 
 
             ExecuteCommand(Command);
+        }
+
+        public TagLib.File CreateFile( string path)
+        {
+            TagLib.File MusicFile = TagLib.File.Create(path);
+            return MusicFile;
+        }
+
+        public void CreateMusicList()
+        {
+            foreach(var file in filesArray)
+            {
+                MusicList.Add(CreateFile(file));
+
+
+            }
         }
         
     }
