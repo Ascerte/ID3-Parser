@@ -24,8 +24,8 @@ namespace ID3_Parser
         List<TagLib.File> MusicList = new List<TagLib.File>();
 
         public string[] Command = new string[2] { "", "" };
-        private const int CmdMax = 5;
-        public string[,] CmdArray = new string[CmdMax,2] { { "cd","" }, { "exit","" }, { "help","" }, { "clear", "" }, { "list", "" } };
+        private const int CmdMax = 6;
+        public string[,] CmdArray = new string[CmdMax,2] { { "cd","" }, { "exit","" }, { "help","" }, { "clear", "" }, { "list", "" }, { "select", "" } };
 
         public void AwaitInput()
         {
@@ -62,17 +62,28 @@ namespace ID3_Parser
                 case "list":
                     ListFiles();
                     break;
+                case "select":
+                    SelectFile(cmd);
+                    break;
             }
 
         }
 
+        private void SelectFile(string[] cmd)
+        {
+            if (MusicList.Count == 0)
+                Console.WriteLine("Target directory is not valid or null");
+            else
+            {
+                //int IndexValue = cmd[1].
+            }
+        }
+
         public void PrintTags(TagLib.File file)
         {
+            //Console.WriteLine("ID3 Tags :")
+            
             //Console.WriteLine("{0,-10} | {1} | {2}", file.Tag.Title, String.Join(" ",file.Tag.Performers), String.Join(" ",file.Tag.Genres));
-           // string[] performers = file.Tag.Genres;
-            //Console.WriteLine(String.Join(" ",performers));
-           // Console.Write("{0}", file.Tag.Genres);
-
         }
 
         private void ListFiles()
@@ -98,6 +109,7 @@ namespace ID3_Parser
             CmdArray[2, 1] = "Terminates the program";
             CmdArray[3, 1] = "Clears the screen";
             CmdArray[4, 1] = "Lists the name, extension and size of music files in the current directory";
+            CmdArray[5, 1] = "Selects a specific file using an index after the base directory has been set";
 
 
             for (int i = 0; i < CmdMax; i++)
