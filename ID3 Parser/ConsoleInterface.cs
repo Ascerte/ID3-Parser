@@ -23,6 +23,7 @@ namespace ID3_Parser
         
         List<TagLib.File> MusicList = new List<TagLib.File>();
 
+        public int FileIndex = 0;
         public string[] Command = new string[2] { "", "" };
         private const int CmdMax = 6;
         public string[,] CmdArray = new string[CmdMax,2] { { "cd","" }, { "exit","" }, { "help","" }, { "clear", "" }, { "list", "" }, { "select", "" } };
@@ -75,7 +76,8 @@ namespace ID3_Parser
                 Console.WriteLine("Target directory is not valid or null");
             else
             {
-                //int IndexValue = cmd[1].
+                Int32.TryParse(cmd[1], out FileIndex);
+                Console.WriteLine(MusicList.ElementAt(FileIndex).Name);
             }
         }
 
