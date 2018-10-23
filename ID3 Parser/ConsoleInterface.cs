@@ -23,10 +23,10 @@ namespace ID3_Parser
         
         List<TagLib.File> MusicList = new List<TagLib.File>();
 
-        public int FileIndex = 0;
+        public int FileIndex = -1;
         public string[] Command = new string[2] { "", "" };
-        private const int CmdMax = 6;
-        public string[,] CmdArray = new string[CmdMax,2] { { "cd","" }, { "exit","" }, { "help","" }, { "clear", "" }, { "list", "" }, { "select", "" } };
+        private const int CmdMax = 7;
+        public string[,] CmdArray = new string[CmdMax,2] { { "cd","" }, { "exit","" }, { "help","" }, { "clear", "" }, { "list", "" }, { "select", "" }, { "tags", "" } };
 
         public void AwaitInput()
         {
@@ -66,6 +66,12 @@ namespace ID3_Parser
                 case "select":
                     SelectFile(cmd);
                     break;
+                case "tags":
+                    if (FileIndex < 0)
+                        Console.WriteLine("No file has been selected");
+                    else
+                    PrintTags(MusicList.ElementAt(FileIndex));
+                    break;
             }
 
         }
@@ -73,19 +79,43 @@ namespace ID3_Parser
         private void SelectFile(string[] cmd)
         {
             if (MusicList.Count == 0)
+            {
                 Console.WriteLine("Target directory is not valid or null");
+                return;
+            }
+
+            int aux;
+            if (Int32.TryParse(cmd[1], out aux) == false)
+            {
+                Console.WriteLine("Index is invalid");
+                return;
+            }
+            else if (aux >= MusicList.Count || aux < 0)
+            {
+                Console.WriteLine("Index is out of range");
+                return;
+            }
             else
             {
-                Int32.TryParse(cmd[1], out FileIndex);
-                Console.WriteLine(MusicList.ElementAt(FileIndex).Name);
+                FileIndex = aux;
+                Console.WriteLine("File {0} is the selected file", FileIndex);
             }
         }
 
         public void PrintTags(TagLib.File file)
         {
-            //Console.WriteLine("ID3 Tags :")
-            
-            //Console.WriteLine("{0,-10} | {1} | {2}", file.Tag.Title, String.Join(" ",file.Tag.Performers), String.Join(" ",file.Tag.Genres));
+            if (FileIndex < 0)
+                Console.WriteLine("Select a file first");
+            else
+            {
+                Console.WriteLine("{0,-10} | {1}",@"Title", file.Tag.Title);
+                Console.WriteLine("{0,-10} | {1}",@"Album", file.Tag.Album);
+                Console.WriteLine("{0,-10} | {1}",@"Performers", String.Join(", ",file.Tag.PerformersSort));
+                Console.WriteLine("{0,-10} | {1}",@"Genres", String.Join(", ",file.Tag.Genres));
+                Console.WriteLine("{0,-10} | {1}",@"Year", file.Tag.Year);
+
+            }
+
         }
 
         private void ListFiles()
