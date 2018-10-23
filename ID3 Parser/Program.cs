@@ -16,12 +16,9 @@ namespace ID3_Parser
             {
                 ui.AwaitInput();
                 ui.ValidateCommand();
+                ui.SaveFile();
 
             }
-
-
-
-
         }
     }
 }
