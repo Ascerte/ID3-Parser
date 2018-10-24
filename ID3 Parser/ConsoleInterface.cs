@@ -118,9 +118,12 @@ namespace ID3_Parser
                 else
                 {
                     Console.WriteLine("Selected file is {0}", FileIndex);
+                    return;
                 }
             }
+
             int aux;
+
             if (Int32.TryParse(cmd[1], out aux) == false)
             {
                 Console.WriteLine("Index is invalid");
@@ -134,7 +137,7 @@ namespace ID3_Parser
             else
             {
                 FileIndex = aux;
-                Console.WriteLine("File {0} is the selected file", FileIndex);
+                Console.WriteLine("Selected file is {0}", FileIndex);
             }
         }
 
